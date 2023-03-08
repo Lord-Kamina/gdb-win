@@ -14,17 +14,31 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - name: Checkout Git
-        id: checkout_git
-        uses: actions/checkout@v3
-        with:
-          path: gdb
       - name: Setup action env and echoing
         shell: bash
         run: |
           echo '::echo::on'
           echo 'action_echo=enabled' >> $GITHUB_OUTPUT
           echo workpath=$(echo '${{ github.workspace }}' | sed 's|\\|/|g') >> $GITHUB_ENV
+      - name: Get latest Github release
+        uses: performous/github-action-get-latest-release@v0.7.0
+        id: get-latest-release
+        with:
+          repository: ssbssa/gdb
+          excludes: prerelease, draft
+          token: ${{ github.token }}
+      - name: Determine checkout tag
+        shell: bash
+        id: determine-checkout-revision
+        run: |
+          echo "gdb-revision=${{ steps.get-latest-release.outputs.release }}" >> $GITHUB_OUTPUT
+      - name: checkout-gdb
+        uses: actions/checkout@v3
+        with:
+          path: ${{ env.workpath }}/gdb
+          repository: ssbssa/gdb
+          ref: '${{ steps.determine-checkout-revision.outputs.gdb-revision }}'
+          fetch-depth: 1 
       - name: Install MSYS2.
         uses: msys2/setup-msys2@v2
         with:
@@ -32,128 +46,83 @@ jobs:
           update: false
           location: "${{ env.workpath }}"
           install: >-
+            bash
+            bison
+            db
             git
-            pacman-contrib
-      - name: List gdb dependencies
+            dos2unix
+            info
+            flex
+            findutils
+            gawk
+            gdbm
+            gmp
+            gmp-devel
+            gettext
+            help2man
+            less
+            libcrypt
+            libdb
+            libgdbm
+            libintl
+            libltdl
+            libtool
+            make
+            m4
+            perl
+            texinfo
+            mingw-w64-x86_64-autotools
+            mingw-w64-x86_64-binutils
+            mingw-w64-x86_64-bzip2
+            mingw-w64-x86_64-crt-git
+            mingw-w64-x86_64-expat
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-gcc-libs
+            mingw-w64-x86_64-gdb
+            mingw-w64-x86_64-gettext
+            mingw-w64-x86_64-gmp
+            mingw-w64-x86_64-headers-git
+            mingw-w64-x86_64-isl
+            mingw-w64-x86_64-libffi
+            mingw-w64-x86_64-libiconv
+            mingw-w64-x86_64-libsystre
+            mingw-w64-x86_64-libtre
+            mingw-w64-x86_64-libwinpthread
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-mpdecimal
+            mingw-w64-x86_64-mpfr
+            mingw-w64-x86_64-ncurses
+            mingw-w64-x86_64-openssl
+            mingw-w64-x86_64-pkg-config
+            mingw-w64-x86_64-python
+            mingw-w64-x86_64-readline
+            mingw-w64-x86_64-sqlite3
+            mingw-w64-x86_64-tcl
+            mingw-w64-x86_64-termcap
+            mingw-w64-x86_64-tk
+            mingw-w64-x86_64-tzdata
+            mingw-w64-x86_64-windows-default-manifest
+            mingw-w64-x86_64-xxhash
+            mingw-w64-x86_64-xz
+            mingw-w64-x86_64-zlib
+
+      - name: Build gdb
         shell: msys2 {0}
         run: |
-          for i in $(pactree -su mingw-w64-x86_64-gdb); do pactree -d 1 -su $i ; done
-  #     mingw-w64-x86_64-gcc-libs
-  #     mingw-w64-x86_64-mpc
-  #     mingw-w64-x86_64-gmp
-  #     mingw-w64-x86_64-libsystre
-  #     mingw-w64-x86_64-libtre-git
-  #     mingw-w64-x86_64-gettext
-  #     mingw-w64-x86_64-expat
-  #     mingw-w64-x86_64-libiconv
-  #     mingw-w64-x86_64-autotools
-  #     mingw-w64-x86_64-cc
-  #     mingw-w64-x86_64-pkg-config
-  #     make
-  #     automake-wrapper
-  #     autoconf-wrapper
-  #     mingw-w64-x86_64-gperf
-  #     mingw-w64-x86_64-bzip2
-  #     mingw-w64-x86_64-expat
-  #     mingw-w64-x86_64-gcc-libs
-  #     mingw-w64-x86_64-libffi
-  #     mingw-w64-x86_64-mpdecimal
-  #     mingw-w64-x86_64-ncurses
-  #     mingw-w64-x86_64-openssl
-  #     mingw-w64-x86_64-sqlite3
-  #     mingw-w64-x86_64-tcl
-  #     mingw-w64-x86_64-tk
-  #     mingw-w64-x86_64-tzdata
-  #     mingw-w64-x86_64-xz
-  #     mingw-w64-x86_64-zlib
-  #     mingw-w64-x86_64-termcap
-  #     mingw-w64-x86_64-cmake
-  #     mingw-w64-x86_64-ninja
-  #     mingw-w64-x86_64-curl
-  #     mingw-w64-x86_64-expat
-  #     mingw-w64-x86_64-gcc-libs
-  #     mingw-w64-x86_64-jsoncpp
-  #     mingw-w64-x86_64-libarchive
-  #     mingw-w64-x86_64-libuv
-  #     mingw-w64-x86_64-ninja
-  #     mingw-w64-x86_64-pkgconf
-  #     mingw-w64-x86_64-rhash
-  #     mingw-w64-x86_64-zlib
-  #     mingw-w64-x86_64-brotli
-  #     mingw-w64-x86_64-c-ares
-  #     mingw-w64-x86_64-ca-certificates
-  #     mingw-w64-x86_64-gcc-libs
-  #     mingw-w64-x86_64-libidn2
-  #     mingw-w64-x86_64-libpsl
-  #     mingw-w64-x86_64-libssh2
-  #     mingw-w64-x86_64-nghttp2
-  #     mingw-w64-x86_64-openssl
-  #     mingw-w64-x86_64-zlib
-  #     mingw-w64-x86_64-zstd
-  #     libtool
-  #     mingw-w64-x86_64-mpfr
-  #     mingw-w64-x86_64-ncurses
-  #     mingw-w64-x86_64-python
-  #     mingw-w64-x86_64-readline
-  #     mingw-w64-x86_64-xxhash
-  #     mingw-w64-x86_64-zlib
-  #     mingw-w64-x86_64-zstd
-  #     mingw-w64-x86_64-make
-  #     mingw-w64-x86_64-winpthreads-git
-  #
-  #    - name: Run cmake to configure the project and build it
-  #    env:
-  #      PERFORMOUS_VERSION: ${{ inputs.package_complete_version }}
-  #    shell: msys2 {0}
-  #    run: |
-  #      cd "${{ env.workpath }}/performous"
-  #      mkdir build
-  #      for f in $(ls -Q ./lang/*.po); do mkdir -pv "./build/lang/$(basename $f | cut -d. -f1)/LC_MESSAGES";done
-  #      cd build
-  #      "${{ env.workpath }}/msys64/mingw64/bin/cmake.exe" -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE="Release" -DSELF_BUILT_AUBIO=ALWAYS -DENABLE_WEBSERVER=ON         -DSELF_BUILT_RESTINIO=ALWAYS -DRESTINIO_FMT_HEADER_ONLY=ON -DPERFORMOUS_VERSION=${{ env.PERFORMOUS_VERSION }} -DCMAKE_VERBOSE_MAKEFILE=ON -DCPACK_MINGW_SYSTEM_PREFIX="${{ env.workpath }}/msys64/mingw64"
-  #      "${{ env.workpath }}/msys64/mingw64/bin/cmake.exe" --build ./ --verbose --parallel 3
-  #    - name: Run unittests directly called.
-  #    shell: msys2 {0}
-  #    run: |
-  #      cd "${{ env.workpath }}/performous/build/testing"
-  #      ./performous_test.exe --gtest_filter=UnitTest*
-  #    - name: Run unittests by ctest.
-  #    shell: msys2 {0}
-  #    run: |
-  #      cd "${{ env.workpath }}/performous/build"
-  #      "${{ env.workpath }}/msys64/mingw64/bin/mingw32-make.exe" test
-  #    - name: Create Installer
-  #    id: package_performous_x64
-  #    shell: msys2 {0}
-  #    run: |
-  #     cd "${{ env.workpath }}/performous/build"
-  #     "${{ env.workpath }}/msys64/mingw64/bin/cpack.exe" -G NSIS64 -DCPACK_MINGW_SYSTEM_PREFIX="${{ env.workpath }}/msys64/mingw64" -DCPACK_NSIS_EXECUTABLE="${{ env.workpath }}/msys64/mingw64/bin/makensis.exe" -DCMAKE_BUILD_TYPE="Release" --verbose
-  #     powershell -command "Copy-Item \$(Get-ChildItem -Filter '*win64.exe').Name 'Performous-latest-mingw-w64.exe'"
-  #     powershell -command "Rename-Item \$(Get-ChildItem -Filter '*win64.exe').Name -NewName 'Performous-${{ inputs.package_complete_version }}-mingw-w64.exe'"
-  #     powershell -command "echo ('ARTIFACT_PATH=${{ env.workpath }}/performous/build/Performous-${{ inputs.package_complete_version }}-mingw-w64.exe') >> \$env:GITHUB_ENV"
-  #     powershell -command "echo ('ARTIFACT_FILENAME=Performous-${{ inputs.package_complete_version }}-mingw-w64.exe') >> \$env:GITHUB_ENV"
-  #     powershell -command "echo ('MASTER_ARTIFACT_PATH=${{ env.workpath }}/performous/build/Performous-latest-mingw-w64.exe') >> \$env:GITHUB_ENV"
-  #     powershell -command "echo ('MASTER_ARTIFACT_FILENAME=Performous-latest-mingw-w64.exe') >> \$env:GITHUB_ENV"
-  #    - name: Upload artifacts
-  #    uses: actions/upload-artifact@v3
-  #    if: ${{ github.event_name == 'pull_request' }}
-  #    with:
-  #      name: ${{ env.ARTIFACT_FILENAME }}
-  #      path: ${{ env.ARTIFACT_PATH }}
-  #
-  #    - name: Upload artifact with unified name
-  #    if: ${{ github.ref == 'refs/heads/master' }}
-  #    uses: actions/upload-artifact@v3
-  #    with:
-  #      name: ${{ env.MASTER_ARTIFACT_FILENAME }}
-  #      path: ${{ env.MASTER_ARTIFACT_PATH }}
-  #
-  #    - name: Upload artifacts to tagged release
-  #    id: upload_assets
-  #    if: ${{ github.event_name != 'pull_request' && github.ref_type == 'tag' }}
-  #    uses: xresloader/upload-to-github-release@v1
-  #    env:
-  #      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #    with:
-  #      release_id: ${{ inputs.release_id }}
-  #      file: ${{ env.ARTIFACT_PATH }}
+          cd ${{ env.workpath }}/gdb
+          find -iname "*.texi" -exec dos2unix '{}' \;
+          mkdir build
+          mkdir '${{ steps.determine-checkout-revision.outputs.gdb-revision }}'
+          cd build
+          ../configure --enable-static --disable-shared --disable-host-shared --with-static-standard-libraries --prefix='${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}' --with-gmp-include=${{ env.workpath }}/msys64/mingw64/include --with-gmp-lib=${{ env.workpath }}/msys64/mingw64/lib --with-sysroot=${{ env.workpath }}/msys64/mingw64/ --disable-interprocess-agent LDFLAGS="-static -static-libgcc -static-libstdc++ -l${{ env.workpath }}/msys64/mingw64/lib/libgmp.a" --verbose
+          sed -i'' -r s/e\.g\.@$/e.g.@:/ ../gdb/doc/gdb.texinfo
+          make VERBOSE=1
+          make install
+          tar -cvJf '${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}.tar.xz' -C '${{ env.workpath }}/gdb' ./${{ steps.determine-checkout-revision.outputs.gdb-revision }}'
+      - name: Upload artifact
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: '${{ steps.determine-checkout-revision.outputs.gdb-revision }}.xz'
+          path: '${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}.tar.xz'
+
