@@ -10,9 +10,9 @@ jobs:
   Windows_MinGW-w64_Binary:
     name: Create Windows binary with MinGW-w64
     runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
+#    defaults:
+#      run:
+#        shell: msys2 {0}
     steps:
       - name: Setup action env and echoing
         shell: bash
@@ -44,7 +44,7 @@ jobs:
         with:
           msystem: MINGW64
           update: false
-          location: "${{ env.workpath }}"
+          location: ${{ github.workspace }}
           install: >-
             bash
             bison
@@ -69,6 +69,7 @@ jobs:
             libtool
             make
             m4
+            patch
             perl
             texinfo
             mingw-w64-x86_64-autotools
@@ -78,7 +79,6 @@ jobs:
             mingw-w64-x86_64-expat
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-gcc-libs
-            mingw-w64-x86_64-gdb
             mingw-w64-x86_64-gettext
             mingw-w64-x86_64-gmp
             mingw-w64-x86_64-headers-git
@@ -106,15 +106,33 @@ jobs:
             mingw-w64-x86_64-xz
             mingw-w64-x86_64-zlib
 
-      - name: Build gdb
-        shell: msys2 {0}
+      - name: Checkout Repo
+        id: checkout_repo
+        uses: actions/checkout@v3
+        with:
+          path: ${{ env.workpath }}
+
+      - name: Check folders
+        shell: ${{github.workspace/msys64/msys2.cmd {0}
+        run: |
+          touch ${{ env.workpath }}/log.log
+          pwd >> ${{ env.workpath }}/log.log
+          ls -l ./ >> ${{ env.workpath }}/log.log
+          ls -l ./* >> ${{ env.workpath }}/log.log
+          ls -l ./*/* >> ${{ env.workpath }}/log.log
+      - name: Patch gdb
+        shell: ${{github.workspace/msys64/msys2.cmd {0}
+        run: |
+          patch --verbose --directory=${{ env.workpath }} -u --input=${{ env.workpath }}/enable-gmp-static.diff >> ${{ github.workspace }}/log.log 2>&1
+      - name: Configure and build gdb
+        shell: ${{github.workspace/msys64/msys2.cmd {0}
         run: |
           cd ${{ env.workpath }}/gdb
           find -iname "*.texi" -exec dos2unix '{}' \;
           mkdir build
           mkdir '${{ steps.determine-checkout-revision.outputs.gdb-revision }}'
           cd build
-          ../configure --enable-static --disable-shared --disable-host-shared --with-static-standard-libraries --prefix='${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}' --with-gmp-include=${{ env.workpath }}/msys64/mingw64/include --with-gmp-lib=${{ env.workpath }}/msys64/mingw64/lib --with-sysroot=${{ env.workpath }}/msys64/mingw64/ --disable-interprocess-agent LDFLAGS="-static -static-libgcc -static-libstdc++ -l${{ env.workpath }}/msys64/mingw64/lib/libgmp.a" --verbose
+          ../configure --verbose --enable-static --disable-shared --disable-host-shared --with-static-standard-libraries --prefix='${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}' --with-gmp-include=${{ env.workpath }}/msys64/mingw64/include --with-gmp-lib=${{ env.workpath }}/msys64/mingw64/lib --with-sysroot=${{ env.workpath }}/msys64/mingw64/ --disable-interprocess-agent CPPFLAGS="-DGMP_STATIC" LDFLAGS="-static -static-libgcc -static-libstdc++" 
           sed -i'' -r s/e\.g\.@$/e.g.@:/ ../gdb/doc/gdb.texinfo
           make VERBOSE=1
           make install
@@ -125,4 +143,10 @@ jobs:
         with:
           name: '${{ steps.determine-checkout-revision.outputs.gdb-revision }}.xz'
           path: '${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}.tar.xz'
+      - name: Upload log
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'log.log'
+          path: ${{ env.workpath }}/log.log
 
