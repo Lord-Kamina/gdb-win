@@ -1,0 +1,15 @@
+diff --git msys64/mingw64/include/gmp.h msys64/mingw64/include/gmp.h
+index cdfee58..e927938 100644
+--- msys64/mingw64/include/gmp.h
++++ msys64/mingw64/include/gmp.h
+@@ -58,8 +58,10 @@ see https://www.gnu.org/licenses/.  */
+ /* Instantiated by configure. */
+ #if ! defined (__GMP_WITHIN_CONFIGURE)
+ #define _LONG_LONG_LIMB 1
++#ifndef GMP_STATIC
+ #define __GMP_LIBGMP_DLL  1
+ #endif
++#endif
+ 
+ 
+ /* __GMP_DECLSPEC supports Windows DLL versions of libgmp, and is empty in
