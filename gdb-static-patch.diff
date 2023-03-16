@@ -1,0 +1,632 @@
+diff --git gdb/bfd/Makefile.in gdb/bfd/Makefile.in
+index 5cd2f37..2154c39 100644
+--- gdb/bfd/Makefile.in
++++ gdb/bfd/Makefile.in
+@@ -197,7 +197,7 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+ libbfd_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libbfd_la_LDFLAGS) $(LDFLAGS) -o $@
+ @INSTALL_LIBBFD_FALSE@am_libbfd_la_rpath =
+ @INSTALL_LIBBFD_TRUE@am_libbfd_la_rpath = -rpath $(bfdlibdir)
+@@ -229,7 +229,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/binutils/Makefile.in gdb/binutils/Makefile.in
+index 30b78a9..cf76bda 100644
+--- gdb/binutils/Makefile.in
++++ gdb/binutils/Makefile.in
+@@ -343,7 +343,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/gas/Makefile.in gdb/gas/Makefile.in
+index 4faf250..abec4fa 100644
+--- gdb/gas/Makefile.in
++++ gdb/gas/Makefile.in
+@@ -215,7 +215,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/gdb/Makefile.in gdb/gdb/Makefile.in
+index ef883f0..0ab13a3 100644
+--- gdb/gdb/Makefile.in
++++ gdb/gdb/Makefile.in
+@@ -148,7 +148,7 @@ LIBTOOL = @LIBTOOL@
+ # Set this up with gcc if you have gnu ld and the loader will print out
+ # line numbers for undefined references.
+ #CC_LD = g++ -static
+-CC_LD = $(LIBTOOL) $(SILENT_FLAG) --mode=link $(CXX) $(CXX_DIALECT)
++CC_LD = $(LIBTOOL) $(SILENT_FLAG) --mode=link $(CXX) -all-static $(CXX_DIALECT)
+ 
+ # Where is our "include" directory?  Typically $(srcdir)/../include.
+ # This is essentially the header file directory for the library
+diff --git gdb/gdb/acinclude.m4 gdb/gdb/acinclude.m4
+index 05106df..9350b92 100644
+--- gdb/gdb/acinclude.m4
++++ gdb/gdb/acinclude.m4
+@@ -237,7 +237,7 @@ AC_DEFUN([GDB_AC_CHECK_BFD], [
+   LDFLAGS="-L../bfd -L../libiberty"
+   intl=`echo $LIBINTL | sed 's,${top_builddir}/,,g'`
+   LIBS="-lbfd -liberty $intl $LIBS"
+-  CC="./libtool --quiet --mode=link $CC"
++  CC="./libtool --quiet --mode=link $CC -all-static"
+   AC_CACHE_CHECK(
+     [$1],
+     [$2],
+diff --git gdb/gprof/Makefile.in gdb/gprof/Makefile.in
+index 5ef5ece..76fe54f 100644
+--- gdb/gprof/Makefile.in
++++ gdb/gprof/Makefile.in
+@@ -182,7 +182,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/gprofng/libcollector/Makefile.in gdb/gprofng/libcollector/Makefile.in
+index 9372c6d..6de0616 100644
+--- gdb/gprofng/libcollector/Makefile.in
++++ gdb/gprofng/libcollector/Makefile.in
+@@ -177,7 +177,7 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+ libgp_collector_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(AM_CFLAGS) $(CFLAGS) $(libgp_collector_la_LDFLAGS) \
+ 	$(LDFLAGS) -o $@
+ libgp_collectorAPI_la_DEPENDENCIES =
+@@ -187,20 +187,20 @@ libgp_heap_la_LIBADD =
+ am_libgp_heap_la_OBJECTS = heaptrace.lo
+ libgp_heap_la_OBJECTS = $(am_libgp_heap_la_OBJECTS)
+ libgp_heap_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libgp_heap_la_LDFLAGS) $(LDFLAGS) -o $@
+ libgp_iotrace_la_LIBADD =
+ am_libgp_iotrace_la_OBJECTS = iotrace.lo
+ libgp_iotrace_la_OBJECTS = $(am_libgp_iotrace_la_OBJECTS)
+ libgp_iotrace_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(AM_CFLAGS) $(CFLAGS) $(libgp_iotrace_la_LDFLAGS) $(LDFLAGS) \
+ 	-o $@
+ libgp_sync_la_LIBADD =
+ am_libgp_sync_la_OBJECTS = synctrace.lo
+ libgp_sync_la_OBJECTS = $(am_libgp_sync_la_OBJECTS)
+ libgp_sync_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libgp_sync_la_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_P = $(am__v_P_@AM_V@)
+ am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+@@ -230,7 +230,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/gprofng/src/Makefile.in gdb/gprofng/src/Makefile.in
+index 7efdb98..0698a4d 100644
+--- gdb/gprofng/src/Makefile.in
++++ gdb/gprofng/src/Makefile.in
+@@ -186,7 +186,7 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+ libgprofng_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) -all-static \
+ 	$(AM_CXXFLAGS) $(CXXFLAGS) $(libgprofng_la_LDFLAGS) $(LDFLAGS) \
+ 	-o $@
+ PROGRAMS = $(bin_PROGRAMS)
+@@ -240,7 +240,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+@@ -258,7 +258,7 @@ am__v_CXX_0 = @echo "  CXX     " $@;
+ am__v_CXX_1 = 
+ CXXLD = $(CXX)
+ CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CXXLD) -all-static $(AM_CXXFLAGS) \
+ 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CXXLD = $(am__v_LD_@AM_V@)
+ am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
+diff --git gdb/ld/Makefile.in gdb/ld/Makefile.in
+index ff4c916..9e46a08 100644
+--- gdb/ld/Makefile.in
++++ gdb/ld/Makefile.in
+@@ -182,28 +182,28 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+ libldtestplug_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(libldtestplug_la_CFLAGS) $(CFLAGS) \
+ 	$(libldtestplug_la_LDFLAGS) $(LDFLAGS) -o $@
+ libldtestplug2_la_LIBADD =
+ am_libldtestplug2_la_OBJECTS = libldtestplug2_la-testplug2.lo
+ libldtestplug2_la_OBJECTS = $(am_libldtestplug2_la_OBJECTS)
+ libldtestplug2_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(libldtestplug2_la_CFLAGS) $(CFLAGS) \
+ 	$(libldtestplug2_la_LDFLAGS) $(LDFLAGS) -o $@
+ libldtestplug3_la_LIBADD =
+ am_libldtestplug3_la_OBJECTS = libldtestplug3_la-testplug3.lo
+ libldtestplug3_la_OBJECTS = $(am_libldtestplug3_la_OBJECTS)
+ libldtestplug3_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(libldtestplug3_la_CFLAGS) $(CFLAGS) \
+ 	$(libldtestplug3_la_LDFLAGS) $(LDFLAGS) -o $@
+ libldtestplug4_la_LIBADD =
+ am_libldtestplug4_la_OBJECTS = libldtestplug4_la-testplug4.lo
+ libldtestplug4_la_OBJECTS = $(am_libldtestplug4_la_OBJECTS)
+ libldtestplug4_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(libldtestplug4_la_CFLAGS) $(CFLAGS) \
+ 	$(libldtestplug4_la_LDFLAGS) $(LDFLAGS) -o $@
+ PROGRAMS = $(bin_PROGRAMS)
+@@ -244,7 +244,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+@@ -1046,7 +1046,7 @@ libdep_la_SOURCES = libdep_plugin.c
+ libdep_la_LDFLAGS = -no-undefined -rpath /nowhere -module -avoid-version
+ libdep_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	--tag=disable-static \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libdep_la_LDFLAGS) $(LDFLAGS) -o $@
+ 
+ MAINTAINERCLEANFILES = configdoc.texi ld.1 ld.info
+diff --git gdb/libbacktrace/Makefile.in gdb/libbacktrace/Makefile.in
+index 0a61880..fabb87c 100644
+--- gdb/libbacktrace/Makefile.in
++++ gdb/libbacktrace/Makefile.in
+@@ -255,7 +255,7 @@ allocfail_OBJECTS = $(am_allocfail_OBJECTS)
+ @NATIVE_TRUE@allocfail_DEPENDENCIES =  \
+ @NATIVE_TRUE@	libbacktrace_instrumented_alloc.la
+ allocfail_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(allocfail_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(allocfail_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am__objects_2 = b2test-btest.$(OBJEXT) \
+ @NATIVE_TRUE@	b2test-testlib.$(OBJEXT)
+@@ -263,7 +263,7 @@ allocfail_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ b2test_OBJECTS = $(am_b2test_OBJECTS)
+ @HAVE_ELF_TRUE@@HAVE_OBJCOPY_DEBUGLINK_TRUE@@NATIVE_TRUE@b2test_DEPENDENCIES = libbacktrace_elf_for_test.la
+ b2test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(b2test_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(b2test_CFLAGS) $(CFLAGS) \
+ 	$(b2test_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am__objects_3 = b3test-btest.$(OBJEXT) \
+ @NATIVE_TRUE@	b3test-testlib.$(OBJEXT)
+@@ -271,14 +271,14 @@ b2test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ b3test_OBJECTS = $(am_b3test_OBJECTS)
+ @HAVE_DWZ_TRUE@@HAVE_ELF_TRUE@@HAVE_OBJCOPY_DEBUGLINK_TRUE@@NATIVE_TRUE@b3test_DEPENDENCIES = libbacktrace_elf_for_test.la
+ b3test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(b3test_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(b3test_CFLAGS) $(CFLAGS) \
+ 	$(b3test_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_btest_OBJECTS = btest-btest.$(OBJEXT) \
+ @NATIVE_TRUE@	btest-testlib.$(OBJEXT)
+ btest_OBJECTS = $(am_btest_OBJECTS)
+ @NATIVE_TRUE@btest_DEPENDENCIES = libbacktrace.la
+ btest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(btest_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(btest_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am__objects_4 = btest_alloc-btest.$(OBJEXT) \
+ @NATIVE_TRUE@	btest_alloc-testlib.$(OBJEXT)
+@@ -286,7 +286,7 @@ btest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ btest_alloc_OBJECTS = $(am_btest_alloc_OBJECTS)
+ @NATIVE_TRUE@btest_alloc_DEPENDENCIES = libbacktrace_alloc.la
+ btest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(btest_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(btest_alloc_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@am_btest_lto_OBJECTS =  \
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@	btest_lto-btest.$(OBJEXT) \
+@@ -294,7 +294,7 @@ btest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ btest_lto_OBJECTS = $(am_btest_lto_OBJECTS)
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@btest_lto_DEPENDENCIES = libbacktrace.la
+ btest_lto_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(btest_lto_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(btest_lto_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@am_ctesta_OBJECTS = ctesta-btest.$(OBJEXT) \
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@	ctesta-testlib.$(OBJEXT)
+@@ -302,7 +302,7 @@ ctesta_OBJECTS = $(am_ctesta_OBJECTS)
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@ctesta_DEPENDENCIES =  \
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@	libbacktrace.la
+ ctesta_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ctesta_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ctesta_CFLAGS) $(CFLAGS) \
+ 	$(ctesta_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@am__objects_5 = ctesta_alloc-btest.$(OBJEXT) \
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@	ctesta_alloc-testlib.$(OBJEXT)
+@@ -311,7 +311,7 @@ ctesta_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ ctesta_alloc_OBJECTS = $(am_ctesta_alloc_OBJECTS)
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@ctesta_alloc_DEPENDENCIES = libbacktrace_alloc.la
+ ctesta_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ctesta_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ctesta_alloc_CFLAGS) \
+ 	$(CFLAGS) $(ctesta_alloc_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@am_ctestg_OBJECTS = ctestg-btest.$(OBJEXT) \
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@	ctestg-testlib.$(OBJEXT)
+@@ -319,7 +319,7 @@ ctestg_OBJECTS = $(am_ctestg_OBJECTS)
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@ctestg_DEPENDENCIES =  \
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@	libbacktrace.la
+ ctestg_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ctestg_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ctestg_CFLAGS) $(CFLAGS) \
+ 	$(ctestg_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@am__objects_6 = ctestg_alloc-btest.$(OBJEXT) \
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@	ctestg_alloc-testlib.$(OBJEXT)
+@@ -328,7 +328,7 @@ ctestg_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ ctestg_alloc_OBJECTS = $(am_ctestg_alloc_OBJECTS)
+ @HAVE_COMPRESSED_DEBUG_TRUE@@NATIVE_TRUE@ctestg_alloc_DEPENDENCIES = libbacktrace_alloc.la
+ ctestg_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ctestg_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ctestg_alloc_CFLAGS) \
+ 	$(CFLAGS) $(ctestg_alloc_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_DWARF5_TRUE@@NATIVE_TRUE@am_dwarf5_OBJECTS =  \
+ @HAVE_DWARF5_TRUE@@NATIVE_TRUE@	dwarf5-btest.$(OBJEXT) \
+@@ -336,7 +336,7 @@ ctestg_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ dwarf5_OBJECTS = $(am_dwarf5_OBJECTS)
+ @HAVE_DWARF5_TRUE@@NATIVE_TRUE@dwarf5_DEPENDENCIES = libbacktrace.la
+ dwarf5_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(dwarf5_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(dwarf5_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_DWARF5_TRUE@@NATIVE_TRUE@am__objects_7 =  \
+ @HAVE_DWARF5_TRUE@@NATIVE_TRUE@	dwarf5_alloc-btest.$(OBJEXT) \
+@@ -347,7 +347,7 @@ dwarf5_alloc_OBJECTS = $(am_dwarf5_alloc_OBJECTS)
+ @HAVE_DWARF5_TRUE@@NATIVE_TRUE@dwarf5_alloc_DEPENDENCIES =  \
+ @HAVE_DWARF5_TRUE@@NATIVE_TRUE@	libbacktrace_alloc.la
+ dwarf5_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(dwarf5_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(dwarf5_alloc_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_edtest_OBJECTS = edtest-edtest.$(OBJEXT) \
+ @NATIVE_TRUE@	edtest-edtest2_build.$(OBJEXT) \
+@@ -355,7 +355,7 @@ dwarf5_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ edtest_OBJECTS = $(am_edtest_OBJECTS)
+ @NATIVE_TRUE@edtest_DEPENDENCIES = libbacktrace.la
+ edtest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(edtest_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(edtest_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am__objects_8 = edtest_alloc-edtest.$(OBJEXT) \
+ @NATIVE_TRUE@	edtest_alloc-edtest2_build.$(OBJEXT) \
+@@ -364,27 +364,27 @@ edtest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ edtest_alloc_OBJECTS = $(am_edtest_alloc_OBJECTS)
+ @NATIVE_TRUE@edtest_alloc_DEPENDENCIES = libbacktrace_alloc.la
+ edtest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(edtest_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(edtest_alloc_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_mtest_OBJECTS = mtest-mtest.$(OBJEXT) \
+ @NATIVE_TRUE@	mtest-testlib.$(OBJEXT)
+ mtest_OBJECTS = $(am_mtest_OBJECTS)
+ @NATIVE_TRUE@mtest_DEPENDENCIES = libbacktrace.la
+ mtest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(mtest_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(mtest_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_stest_OBJECTS = stest-stest.$(OBJEXT)
+ stest_OBJECTS = $(am_stest_OBJECTS)
+ @NATIVE_TRUE@stest_DEPENDENCIES = libbacktrace.la
+ stest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(stest_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(stest_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am__objects_9 = stest_alloc-stest.$(OBJEXT)
+ @NATIVE_TRUE@am_stest_alloc_OBJECTS = $(am__objects_9)
+ stest_alloc_OBJECTS = $(am_stest_alloc_OBJECTS)
+ @NATIVE_TRUE@stest_alloc_DEPENDENCIES = libbacktrace_alloc.la
+ stest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(stest_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(stest_alloc_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_test_elf_32_OBJECTS =  \
+ @NATIVE_TRUE@	test_elf_32-test_format.$(OBJEXT) \
+@@ -393,7 +393,7 @@ test_elf_32_OBJECTS = $(am_test_elf_32_OBJECTS)
+ @NATIVE_TRUE@test_elf_32_DEPENDENCIES = libbacktrace_noformat.la \
+ @NATIVE_TRUE@	elf_32.lo
+ test_elf_32_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_elf_32_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(test_elf_32_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_test_elf_64_OBJECTS =  \
+ @NATIVE_TRUE@	test_elf_64-test_format.$(OBJEXT) \
+@@ -402,7 +402,7 @@ test_elf_64_OBJECTS = $(am_test_elf_64_OBJECTS)
+ @NATIVE_TRUE@test_elf_64_DEPENDENCIES = libbacktrace_noformat.la \
+ @NATIVE_TRUE@	elf_64.lo
+ test_elf_64_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_elf_64_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(test_elf_64_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_test_macho_OBJECTS = test_macho-test_format.$(OBJEXT) \
+ @NATIVE_TRUE@	test_macho-testlib.$(OBJEXT)
+@@ -410,7 +410,7 @@ test_macho_OBJECTS = $(am_test_macho_OBJECTS)
+ @NATIVE_TRUE@test_macho_DEPENDENCIES = libbacktrace_noformat.la \
+ @NATIVE_TRUE@	macho.lo
+ test_macho_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_macho_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(test_macho_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_test_pecoff_OBJECTS =  \
+ @NATIVE_TRUE@	test_pecoff-test_format.$(OBJEXT) \
+@@ -419,7 +419,7 @@ test_pecoff_OBJECTS = $(am_test_pecoff_OBJECTS)
+ @NATIVE_TRUE@test_pecoff_DEPENDENCIES = libbacktrace_noformat.la \
+ @NATIVE_TRUE@	pecoff.lo
+ test_pecoff_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_pecoff_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(test_pecoff_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_test_unknown_OBJECTS =  \
+ @NATIVE_TRUE@	test_unknown-test_format.$(OBJEXT) \
+@@ -428,7 +428,7 @@ test_unknown_OBJECTS = $(am_test_unknown_OBJECTS)
+ @NATIVE_TRUE@test_unknown_DEPENDENCIES = libbacktrace_noformat.la \
+ @NATIVE_TRUE@	unknown.lo
+ test_unknown_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_unknown_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(test_unknown_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_test_xcoff_32_OBJECTS =  \
+ @NATIVE_TRUE@	test_xcoff_32-test_format.$(OBJEXT) \
+@@ -437,7 +437,7 @@ test_xcoff_32_OBJECTS = $(am_test_xcoff_32_OBJECTS)
+ @NATIVE_TRUE@test_xcoff_32_DEPENDENCIES = libbacktrace_noformat.la \
+ @NATIVE_TRUE@	xcoff_32.lo
+ test_xcoff_32_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_xcoff_32_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(test_xcoff_32_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_test_xcoff_64_OBJECTS =  \
+ @NATIVE_TRUE@	test_xcoff_64-test_format.$(OBJEXT) \
+@@ -446,7 +446,7 @@ test_xcoff_64_OBJECTS = $(am_test_xcoff_64_OBJECTS)
+ @NATIVE_TRUE@test_xcoff_64_DEPENDENCIES = libbacktrace_noformat.la \
+ @NATIVE_TRUE@	xcoff_64.lo
+ test_xcoff_64_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(test_xcoff_64_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(test_xcoff_64_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_PTHREAD_TRUE@@NATIVE_TRUE@am_ttest_OBJECTS =  \
+ @HAVE_PTHREAD_TRUE@@NATIVE_TRUE@	ttest-ttest.$(OBJEXT) \
+@@ -454,7 +454,7 @@ test_xcoff_64_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ ttest_OBJECTS = $(am_ttest_OBJECTS)
+ @HAVE_PTHREAD_TRUE@@NATIVE_TRUE@ttest_DEPENDENCIES = libbacktrace.la
+ ttest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ttest_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ttest_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_PTHREAD_TRUE@@NATIVE_TRUE@am__objects_10 =  \
+ @HAVE_PTHREAD_TRUE@@NATIVE_TRUE@	ttest_alloc-ttest.$(OBJEXT) \
+@@ -465,14 +465,14 @@ ttest_alloc_OBJECTS = $(am_ttest_alloc_OBJECTS)
+ @HAVE_PTHREAD_TRUE@@NATIVE_TRUE@ttest_alloc_DEPENDENCIES =  \
+ @HAVE_PTHREAD_TRUE@@NATIVE_TRUE@	libbacktrace_alloc.la
+ ttest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ttest_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ttest_alloc_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am_unittest_OBJECTS = unittest-unittest.$(OBJEXT) \
+ @NATIVE_TRUE@	unittest-testlib.$(OBJEXT)
+ unittest_OBJECTS = $(am_unittest_OBJECTS)
+ @NATIVE_TRUE@unittest_DEPENDENCIES = libbacktrace.la
+ unittest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(unittest_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(unittest_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @NATIVE_TRUE@am__objects_11 = unittest_alloc-unittest.$(OBJEXT) \
+ @NATIVE_TRUE@	unittest_alloc-testlib.$(OBJEXT)
+@@ -480,7 +480,7 @@ unittest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ unittest_alloc_OBJECTS = $(am_unittest_alloc_OBJECTS)
+ @NATIVE_TRUE@unittest_alloc_DEPENDENCIES = libbacktrace_alloc.la
+ unittest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(unittest_alloc_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
+ 	$@
+ @HAVE_ELF_TRUE@am_xztest_OBJECTS = xztest-xztest.$(OBJEXT) \
+@@ -489,7 +489,7 @@ xztest_OBJECTS = $(am_xztest_OBJECTS)
+ @HAVE_ELF_TRUE@xztest_DEPENDENCIES = libbacktrace.la \
+ @HAVE_ELF_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ xztest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(xztest_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(xztest_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_ELF_TRUE@am__objects_12 = xztest_alloc-xztest.$(OBJEXT) \
+ @HAVE_ELF_TRUE@	xztest_alloc-testlib.$(OBJEXT)
+@@ -498,7 +498,7 @@ xztest_alloc_OBJECTS = $(am_xztest_alloc_OBJECTS)
+ @HAVE_ELF_TRUE@xztest_alloc_DEPENDENCIES = libbacktrace_alloc.la \
+ @HAVE_ELF_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ xztest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(xztest_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(xztest_alloc_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@am_ztest_OBJECTS = ztest-ztest.$(OBJEXT) \
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@	ztest-testlib.$(OBJEXT)
+@@ -507,7 +507,7 @@ ztest_OBJECTS = $(am_ztest_OBJECTS)
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@	$(am__DEPENDENCIES_1) \
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@	$(am__DEPENDENCIES_1)
+ ztest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ztest_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ztest_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@am__objects_13 =  \
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@	ztest_alloc-ztest.$(OBJEXT) \
+@@ -520,7 +520,7 @@ ztest_alloc_OBJECTS = $(am_ztest_alloc_OBJECTS)
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@	$(am__DEPENDENCIES_1) \
+ @HAVE_ELF_TRUE@@NATIVE_TRUE@	$(am__DEPENDENCIES_1)
+ ztest_alloc_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(ztest_alloc_CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(ztest_alloc_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_P = $(am__v_P_@AM_V@)
+ am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+@@ -549,7 +549,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/libctf/Makefile.in gdb/libctf/Makefile.in
+index 1984f50..50e1527 100644
+--- gdb/libctf/Makefile.in
++++ gdb/libctf/Makefile.in
+@@ -211,7 +211,7 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+ libctf_nobfd_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static \
+ 	$(AM_CFLAGS) $(CFLAGS) $(libctf_nobfd_la_LDFLAGS) $(LDFLAGS) \
+ 	-o $@
+ @INSTALL_LIBBFD_FALSE@am_libctf_nobfd_la_rpath =
+@@ -236,7 +236,7 @@ am__objects_3 = libctf_la-ctf-archive.lo libctf_la-ctf-dump.lo \
+ am_libctf_la_OBJECTS = $(am__objects_3) libctf_la-ctf-open-bfd.lo
+ libctf_la_OBJECTS = $(am_libctf_la_OBJECTS)
+ libctf_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libctf_la_LDFLAGS) $(LDFLAGS) -o $@
+ @INSTALL_LIBBFD_FALSE@am_libctf_la_rpath =
+ @INSTALL_LIBBFD_TRUE@am_libctf_la_rpath = -rpath $(libdir)
+@@ -268,7 +268,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/libctf/configure.ac gdb/libctf/configure.ac
+index 65686fe..a33b10f 100644
+--- gdb/libctf/configure.ac
++++ gdb/libctf/configure.ac
+@@ -84,7 +84,7 @@ OLD_CC=$CC
+ # Put the old CFLAGS/LDFLAGS last, in case the user's (C|LD)FLAGS
+ # points somewhere with bfd, with -I/foo/lib and -L/foo/lib.  We
+ # always want our bfd.
+-CC="./libtool --quiet --mode=link $OLD_CC"
++CC="./libtool --quiet --mode=link $OLD_CC -all-static"
+ CFLAGS="-I${srcdir}/../include -I../bfd -I${srcdir}/../bfd $CFLAGS"
+ LDFLAGS="-L../bfd -L../libiberty $LDFLAGS"
+ intl=`echo $LIBINTL | sed 's,${top_builddir}/,,g'`
+diff --git gdb/libsframe/Makefile.in gdb/libsframe/Makefile.in
+index 8622d8b..2a6a9a6 100644
+--- gdb/libsframe/Makefile.in
++++ gdb/libsframe/Makefile.in
+@@ -232,7 +232,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/opcodes/Makefile.in gdb/opcodes/Makefile.in
+index db96cd6..9962478 100644
+--- gdb/opcodes/Makefile.in
++++ gdb/opcodes/Makefile.in
+@@ -185,7 +185,7 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+ libopcodes_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libopcodes_la_LDFLAGS) $(LDFLAGS) -o $@
+ @INSTALL_LIBBFD_FALSE@am_libopcodes_la_rpath =
+ @INSTALL_LIBBFD_TRUE@am_libopcodes_la_rpath = -rpath $(bfdlibdir)
+@@ -217,7 +217,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/sim/Makefile.in gdb/sim/Makefile.in
+index 24b75fc..3a88d59 100644
+--- gdb/sim/Makefile.in
++++ gdb/sim/Makefile.in
+@@ -619,7 +619,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+diff --git gdb/sim/common/Make-common.in gdb/sim/common/Make-common.in
+index 88c66b3..1fa0d3f 100644
+--- gdb/sim/common/Make-common.in
++++ gdb/sim/common/Make-common.in
+@@ -273,7 +273,7 @@ stamp-hw: Makefile.in $(srccom)/Make-common.in $(config.status) Makefile
+ 
+ test-hw-events: $(srccom)/hw-events.c libsim.a
+ 	$(ECHO_CCLD) $(LIBTOOL) $(AM_V_lt) --tag=CC --mode=link \
+-		$(CC) $(ALL_CFLAGS) -DMAIN -o test-hw-events$(EXEEXT) \
++		$(CC) -all-static $(ALL_CFLAGS) -DMAIN -o test-hw-events$(EXEEXT) \
+ 		$(srccom)/hw-events.c libsim.a $(EXTRA_LIBS)
+ 
+ # See sim_pre_argv_init and sim_module_install in sim-module.c for more details.
+diff --git gdb/zlib/Makefile.in gdb/zlib/Makefile.in
+index 855c23e..1a26cc8 100644
+--- gdb/zlib/Makefile.in
++++ gdb/zlib/Makefile.in
+@@ -206,7 +206,7 @@ am__v_CC_0 = @echo "  CC      " $@;
+ am__v_CC_1 = 
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) -all-static $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)

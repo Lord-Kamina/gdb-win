@@ -61,8 +61,6 @@ jobs:
             findutils
             gawk
             gdbm
-            gmp
-            gmp-devel
             gettext
             help2man
             less
@@ -115,6 +113,7 @@ jobs:
         run: |
           cd ${{ env.workpath }}
           patch --verbose -u -p0 --input=${{ env.workpath }}/enable-gmp-static.diff >> ${{ env.workpath }}/log.log 2>&1
+          patch --verbose -u -p0 --input=${{ env.workpath }}/gdb-static-patch.diff >> ${{ env.workpath }}/log.log 2>&1
       - name: Configure and build gdb
         shell: msys2 {0}
         run: |
@@ -123,9 +122,18 @@ jobs:
           mkdir build
           mkdir '${{ steps.determine-checkout-revision.outputs.gdb-revision }}'
           cd build
-          ../configure --verbose --enable-static --disable-shared --disable-host-shared --with-static-standard-libraries --prefix='${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}' --with-gmp-include=${{ env.workpath }}/msys64/mingw64/include --with-gmp-lib=${{ env.workpath }}/msys64/mingw64/lib --with-sysroot=${{ env.workpath }}/msys64/mingw64/ --disable-interprocess-agent CPPFLAGS="-DGMP_STATIC=1" CFLAGS="-DGMP_STATIC=1" LDFLAGS="-static -static-libgcc -static-libstdc++" 
+          #rm ${{ env.workpath }}/msys64/mingw64/lib/libgmp*.dll.a
+          #rm ${{ env.workpath }}/msys64/mingw64/bin/libgmp*.dll
+          #rm ${{ env.workpath }}/msys64/mingw64/lib/libzstd.dll.a
+          #rm ${{ env.workpath }}/msys64/mingw64/bin/libzstd.dll
+          mkdir -p ${{ env.workpath }}/msys64/mingw64/lib/static
+          cp -v ${{ env.workpath }}/msys64/mingw64/lib/libzstd.a ${{ env.workpath }}/msys64/mingw64/lib/static/
+          cp -v ${{ env.workpath }}/msys64/mingw64/lib/libgmp.a ${{ env.workpath }}/msys64/mingw64/lib/static/
+          cp -v ${{ env.workpath }}/msys64/mingw64/lib/libgmpxx.a ${{ env.workpath }}/msys64/mingw64/lib/static/
+          ../configure --verbose --enable-static --disable-shared --disable-host-shared --with-static-standard-libraries --prefix='${{ env.workpath }}/gdb/${{ steps.determine-checkout-revision.outputs.gdb-revision }}' --with-gmp-include=${{ env.workpath }}/msys64/mingw64/include --with-gmp-lib=${{ env.workpath }}/msys64/mingw64/lib --with-sysroot=${{ env.workpath }}/msys64/mingw64/ --disable-interprocess-agent --with-libmpfr-type=static --with-libgmp-type=static --with-libexpat-type=static --with-libiconv-type=static --with-libipt-type=static --disable-gdbtk --disable-tui CFLAGS='-DGMP_STATIC -DNEED_EXTERN_PC' CXXFLAGS='-DNCURSES_STATIC' LDFLAGS='-static -static-libgcc -static-libstdc++ -L${{ env.workpath }}/msys64/mingw64/lib/static -lgmp' 
           sed -i'' -r s/e\.g\.@$/e.g.@:/ ../gdb/doc/gdb.texinfo
-          make VERBOSE=1
+          make V=1 AM_DEFAULT_VERBOSITY=1
+          # -l${{ env.workpath }}/msys64/mingw64/lib/libgmp.a -l${{ env.workpath }}/msys64/mingw64/lib/llibgmpxx.a
           make install
           cd '${{ env.workpath }}/gdb'
           tar -cvJf '${{ steps.determine-checkout-revision.outputs.gdb-revision }}.tar.xz' -C '${{ env.workpath }}/gdb' './${{ steps.determine-checkout-revision.outputs.gdb-revision }}'
@@ -139,6 +147,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
         with:
-          name: 'log.log'
-          path: ${{ env.workpath }}/log.log
+          name: 'Logs'
+          path: |
+            ${{ env.workpath }}/**/*.log
 
